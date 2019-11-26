@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.kingbirdle.advertistingjar">
+
+    <!-- SD卡读写操作 -->
+    <permission
+        android:name="app.custom.permission"
+        android:protectionLevel="signature"
+        tools:ignore="ManifestOrder" />
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:resizeable="true"
+        android:smallScreens="true"
+        android:xlargeScreens="true" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- 屏幕锁权限 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!-- 开机启动权限 -->
+    <uses-permission android:name="android.permission.REORDER_TASKS" />
+    <!-- 百度地图相关 -->
+    <!-- 这个权限用于访问GPS定位 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- 这个权限用于获取wifi的获取权限，wifi信息会用来进行网络定位 -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <!-- &lt;!&ndash;装载和卸载文件系统&ndash;&gt; -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <!-- 允许应用程序访问有关的网络信息 -->
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+    <!-- 允许应用程序访问WIFI网卡的网络信息 -->
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <!-- 读取读取电话状态权限 -->
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <!-- 访问定位权限 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- 静默安装 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!-- 讯飞语音权限 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!--前后台的切换-->
+    <uses-permission android:name="android.permission.INSTALL_PACKAGES" />
+    <!--写入权限-->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <!--读取log-->
+    <uses-permission android:name="android.permission.READ_LOGS" />
+    <!--网络状态修改-->
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+
+    <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" />
+
+    <uses-permission android:name="app.custom.permission" />
+
+    <application
+        android:name=".application.MyApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+        <activity android:name=".base.PermissionsActivity" />
+
+        <service android:name=".service.MonitorService" />
+
+        <!--        <meta-data-->
+        <!--            android:name="com.baidu.lbsapi.API_KEY"-->
+        <!--            android:value="ri5FsAyGLjGU3TAN9aOHZAWqaINA1Fgv" />-->
+        <!--            android:value="ebwQGyVwTwfnSHmmvsznl8rhSijTHPZn" />-->
+        <!--        android:name="android.support.v4.content.FileProvider"-->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.kingbirdle.advertistingjar.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+
+            <!-- 元数据 -->
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <service
+            android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:process=":remote" />
+    </application>
+
+</manifest>

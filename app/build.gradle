@@ -1,0 +1,111 @@
+//apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.2"
+    defaultConfig {
+//        applicationId "com.kingbirdle.advertistingjar"
+        minSdkVersion 19
+        targetSdkVersion 29
+        multiDexEnabled true
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        //BuildConfig中新增常量
+        buildConfigField "boolean", "LOG_DEBUG", "true"
+        //popupwindow
+        renderscriptTargetApi 17
+        renderscriptSupportModeEnabled true
+    }
+    buildTypes {
+        release {
+            buildConfigField "boolean", "LOG_DEBUG", "true"
+            minifyEnabled true//开启混淆
+            zipAlignEnabled true//压缩优化
+            // 移除无用的resource文件
+//            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    //处理所有报META-INF/*'的错误
+    packagingOptions {
+        pickFirst 'META-INF/*'
+    }
+
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+        //2018-10-26添加忽略application的“ACTION-VIEW”这个错误
+        disable 'GoogleAppIndexingWarning'
+    }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['src/main/jniLibs']
+        }
+    }
+    repositories {
+        flatDir { dirs 'libs' }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+    implementation 'com.google.code.gson:gson:2.8.6'
+    api 'com.qiniu:happy-dns:0.2.13'
+    api 'org.litepal.android:core:2.0.0'
+    api 'com.github.zhaokaiqiang.klog:library:1.6.0'
+    api 'com.tsy:myokhttp:1.1.4'
+    api 'org.apache.mina:mina-core:2.0.7'
+//    api 'com.dalong:marqueeview:1.0.1'
+//    api 'pl.droidsonroids.gif:android-gif-drawable:1.2.12'
+    api 'pl.droidsonroids.gif:android-gif-drawable:1.2.19'
+    api 'com.github.bumptech.glide:glide:4.8.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
+    api 'com.shizhefei:LargeImageView:1.0.9'
+    api 'com.youth.banner:banner:1.4.10'
+
+    api 'tv.danmaku.ijk.media:ijkplayer-java:0.5.1'
+    api 'tv.danmaku.ijk.media:ijkplayer-armv7a:0.5.1'
+
+    //popupwindow
+    api 'com.github.razerdp:BasePopup:2.1.7'
+
+    //腾讯移动分析
+//    implementation 'com.tencent.tac:tac-core:1.3.1'
+    //腾讯崩溃服务
+//    implementation 'com.tencent.tac:tac-crash:1.3.1'
+    //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如2.1.9
+    api 'com.tencent.bugly:nativecrashreport:3.7.1'
+    api 'com.tencent.bugly:crashreport:2.6.6.1'
+
+    //获取后台进程
+    api 'com.jaredrummler:android-processes:1.1.1'
+
+    // 京东钼媒
+    api 'ad.kuaifa.com:kuaifa-sdk-ad:1.0.12'
+}
+
+task clearJar(type: Delete) {
+    //这行表示如果你已经打过一次包了，再进行打包则把原来的包删掉
+    delete 'build/libs/test_1.0.0.jar'
+}
+
+task makeJar(type: Copy) {
+    from('build/intermediates/packaged-classes/release/')
+    //这行表示要打包的文件的路径，根据下面的内容，其实是该路径下的classes.jar
+    into('libs/')  //这行表示打包完毕后包的生成路径，也就是生成的包存在哪
+    include('classes.jar')  //看到这行，如果你对分包有了解的话，你就可以看出来这行它只是将一些类打包了
+    rename('classes.jar', 'test_1.0.0.jar')
+}
+
+makeJar.dependsOn(build)
+
